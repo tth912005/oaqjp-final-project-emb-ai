@@ -16,42 +16,8 @@ def emotion_detector(text_to_analyze):
     
     response = requests.post(url, json=input_json, headers=headers)
     
-    # Task 7: Xử lý lỗi status code 400
-    if response.status_code == 400:
-        return {
-            'anger': None,
-            'disgust': None,
-            'fear': None,
-            'joy': None,
-            'sadness': None,
-            'dominant_emotion': None
-        }
-    
     formatted_response = json.loads(response.text)
+    
     emotions = formatted_response['emotionPredictions'][0]['emotion']
     
-    # Lấy các giá trị cảm xúc
-    anger = emotions['anger']
-    disgust = emotions['disgust']
-    fear = emotions['fear']
-    joy = emotions['joy']
-    sadness = emotions['sadness']
-    
-    # Tìm dominant emotion
-    emotion_scores = {
-        'anger': anger,
-        'disgust': disgust,
-        'fear': fear,
-        'joy': joy,
-        'sadness': sadness
-    }
-    dominant_emotion = max(emotion_scores, key=emotion_scores.get)
-    
-    return {
-        'anger': anger,
-        'disgust': disgust,
-        'fear': fear,
-        'joy': joy,
-        'sadness': sadness,
-        'dominant_emotion': dominant_emotion
-    }
+    return emotions
