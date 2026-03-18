@@ -9,15 +9,16 @@ app = Flask("Emotion Detection")
 @app.route("/emotionDetector")
 def sent_detector():
     """
-    Route này nhận text từ giao diện web, gọi hàm phân tích cảm xúc
-    và trả về chuỗi kết quả đã được định dạng.
+    Nhận text, gọi hàm phân tích cảm xúc và trả về kết quả.
+    Đã bổ sung xử lý lỗi đầu vào rỗng (Blank input).
     """
     text_to_analyze = request.args.get('textToAnalyze')
-    
-    # Gọi hàm từ package bạn đã tạo
     response = emotion_detector(text_to_analyze)
     
-    # Định dạng kết quả đầu ra theo yêu cầu của khóa học
+    # Task 7: Kiểm tra nếu dominant_emotion là None thì báo lỗi
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+    
     return (
         f"For the given statement, the system response is "
         f"'anger': {response['anger']}, 'disgust': {response['disgust']}, "
@@ -29,7 +30,7 @@ def sent_detector():
 @app.route("/")
 def render_index_page():
     """
-    Route này render giao diện chính của ứng dụng (file index.html).
+    Render giao diện chính (index.html).
     """
     return render_template('index.html')
 
